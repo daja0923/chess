@@ -20,7 +20,9 @@ class SquareTest extends FunSuite{
   }
 
 
-  test("All pieces in Row 2 must be white pawns")
+  test("All pieces in Row 2 must be white pawns"){
+
+  }
 
 
 }
