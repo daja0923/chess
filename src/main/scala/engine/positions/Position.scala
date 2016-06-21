@@ -46,8 +46,8 @@ object Square{
   private def squareWithPiece(pos:Position, alliance: Alliance, col:Rank):Square ={
     val piece = col match {
       case Rank.A | Rank.H => Rook(alliance, pos)
-      case Rank.B | Rank.G => Bishop(alliance, pos)
-      case Rank.C | Rank.F => Knight(alliance, pos)
+      case Rank.B | Rank.G => Knight(alliance, pos)
+      case Rank.C | Rank.F => Bishop(alliance, pos)
       case Rank.D => Queen(alliance, pos)
       case Rank.E => King(alliance, pos)
     }
