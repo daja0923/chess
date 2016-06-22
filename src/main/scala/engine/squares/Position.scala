@@ -1,10 +1,10 @@
-package engine.positions
+package engine.squares
 
 import engine.Alliance
 import engine.Alliance.Alliance
 import engine.pieces._
-import engine.positions.Rank.Rank
-import engine.positions.Row.Row
+import engine.squares.Rank.Rank
+import engine.squares.Row.Row
 
 /**
  * Created by jamol on 20/06/16.
@@ -22,7 +22,7 @@ case class Square(position: Position, piece: Option[Piece]){
 
 
 object Square{
-  def start:List[Square] = (for {
+  def initiate:List[Square] = (for {
     col <- Rank.values
     row <- Row.values
   }yield buildSquare(col, row)).toList

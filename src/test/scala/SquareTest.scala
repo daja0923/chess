@@ -1,6 +1,6 @@
 import engine.Alliance
 import engine.pieces._
-import engine.positions.{Position, Rank, Row, Square}
+import engine.squares.{Position, Rank, Row, Square}
 import org.scalatest.FunSuite
 
 /**
@@ -9,7 +9,7 @@ import org.scalatest.FunSuite
 class SquareTest extends FunSuite{
 
 
-  val initialState = Square.start
+  val initialState = Square.initiate
 
   val white = Alliance.White
   val black = Alliance.Black

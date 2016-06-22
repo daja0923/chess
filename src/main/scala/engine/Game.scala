@@ -1,7 +1,7 @@
 package engine
 
 import engine.Alliance.Alliance
-import engine.positions.{Square, Position}
+import engine.squares.{Square, Position}
 
 /**
  * Created by jamol on 20/06/16.

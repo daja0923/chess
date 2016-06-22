@@ -1,4 +1,4 @@
-package engine.positions
+package engine.squares
 
 /**
  * Created by jamol on 20/06/16.

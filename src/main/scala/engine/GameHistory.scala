@@ -1,7 +1,7 @@
 package engine
 
 import engine.pieces.Piece
-import engine.positions.Square
+import engine.squares.Square
 
 /**
  * Created by jamol on 20/06/16.
@@ -12,7 +12,7 @@ class GameHistory( moves:List[Move]) {
 
 
 
-  def start:State = Square.start
+  def start:State = Square.initiate
 
 
 

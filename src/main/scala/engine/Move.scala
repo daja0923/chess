@@ -2,7 +2,7 @@ package engine
 
 import engine.Alliance.Alliance
 import engine.pieces.Piece
-import engine.positions.Position
+import engine.squares.Position
 
 /**
  * Created by jamol on 20/06/16.

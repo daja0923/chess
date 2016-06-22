@@ -4,7 +4,7 @@ package engine.pieces
  * Created by jamol on 20/06/16.
  */
 import engine.Alliance._
-import engine.positions.{Square, Position}
+import engine.squares.{Square, Position}
 
 abstract class Piece {
 
