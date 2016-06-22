@@ -19,6 +19,6 @@ trait Move {
 
   def alliance:Alliance = piece.alliance
 
-  def removed:Option[Piece]
+  def removedEnemyPiece:Option[Piece]
 
 }

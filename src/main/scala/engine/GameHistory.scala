@@ -35,7 +35,7 @@ class GameHistory( moves:List[Move]) {
     val square = current.find(s => s.position equals move.dest).get
     current.map { s =>
       if (s.position equals move.dest) s.copy(position = move.dest)
-      else if(piecesTheSame(s.piece, move.removed)) s.copy(piece = None)
+      else if(piecesTheSame(s.piece, move.removedEnemyPiece)) s.copy(piece = None)
       else s
     }
   }
