@@ -41,13 +41,13 @@ class SquareTest extends FunSuite{
 
   test("All squares in rows 1 and 2 should have white pieces"){
     val squares = initialState.filter(_.position.row.id <= 2)
-    val allwhitePieces = squares.forall{square =>
+    val allWhitePieces = squares.forall{square =>
       square.piece.map(_.alliance) match {
         case Some(`white`) => true
         case _ => false
       }
     }
-    assert(allwhitePieces)
+    assert(allWhitePieces)
   }
 
 
