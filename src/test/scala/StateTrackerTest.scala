@@ -30,21 +30,51 @@ class StateTrackerTest extends FunSuite{
   import engine.squares.Row._
 
 
-  test("After 62nd move of white the end state must be as ecpected"){
+  test("After 62nd move of white the end state must be as expected"){
+    //move 1
     move(Position(E, TWO), Position(E, FOUR))
     move(Position(C, SEVEN), Position(C, FIVE))
 
+    //move 2
     move(Position(G, ONE), Position(F, THREE))
     move(Position(D, SEVEN), Position(D, SIX))
 
+    //move 3
     move(Position(F, ONE), Position(B, FIVE))
+    moveHelper(C, EIGHT, D, SEVEN)
+
+    //move 4
+    move(Position(B, FIVE), Position(D, SEVEN), "simple", Some(Position(D, SEVEN)))
+    move(Position(D, EIGHT), Position(D, SEVEN), "simple", Some(Position(D, SEVEN)))
+
+    //move 5
+    moveHelper(C, TWO, C, FOUR)
+    moveHelper(B, EIGHT, C, SIX)
+
+    //move 6
+    moveHelper(B, ONE, C, THREE)
+    moveHelper(G, EIGHT, F, SIX)
+
+    //move 7
+    moveHelper(E, ONE, G, ONE); moveHelper(H, ONE, F, ONE)
+    moveHelper(G, SEVEN, G, SIX)
+
+
+    //move 8
+    moveHelper(D, TWO, D, FOUR)
+    move(Position(C, FIVE), Position(D, FOUR), "simple", Some(Position(D, FOUR)))
+
+    //move 9
+    move(Position(E, TWO), Position(D, FOUR), "simple", Some(Position(D, FOUR)))
+    moveHelper(F, EIGHT, G, SEVEN)
+
+    //move 10
 
 
 
 
-
-
-
+    def moveHelper(rank1:Rank, row1: Row, rank2:Rank, row2:Row) =
+    move(Position(rank1, row1), Position(rank2, row2))
     assert(currentState equals expectedEndState)
   }
 
