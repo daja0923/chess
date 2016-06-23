@@ -1,4 +1,4 @@
-package engine
+package engine.moves
 
 import engine.Alliance.Alliance
 import engine.pieces.Piece
@@ -19,6 +19,6 @@ trait Move {
 
   def alliance:Alliance = piece.alliance
 
-  def removedEnemyPiece:Option[Piece]
+  def attacked:Option[Piece]
 
 }

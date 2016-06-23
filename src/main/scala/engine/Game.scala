@@ -1,6 +1,7 @@
 package engine
 
 import engine.Alliance.Alliance
+import engine.moves.Move
 import engine.squares.{Square, Position}
 
 /**

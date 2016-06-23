@@ -1,7 +1,10 @@
 package engine
 
+import engine.moves.Move
 import engine.pieces.Piece
-import engine.squares.Square
+import engine.squares.Rank.Rank
+import engine.squares.Row.Row
+import engine.squares.{Position, Rank, Row, Square}
 
 /**
  * Created by jamol on 22/06/16.
@@ -33,10 +36,23 @@ object StateTracker {
         square.copy(piece = Some(move.piece))
       else if(square.position equals move.from)
         square.copy(piece = None)
-      else if(piecesTheSame(square.piece, move.removedEnemyPiece))
+      else if(piecesTheSame(square.piece, move.attacked))
         square.copy(piece = None) //clearing removedEnemy square explicitly because it is not always destination square
       else square
     }
+
+
+  def square(state: State, position: Position):Square = {
+    val squareOption = state.find(_.position equals Position(Rank.E, Row.TWO))
+    if(squareOption.isEmpty)
+      throw new NoSuchElementException("square at position " + position)
+    else
+      squareOption.get
+  }
+
+
+  def square(state:State, rank: Rank, row: Row):Square = square(state, Position(rank, row))
+
 
 
   private def piecesTheSame(piece1:Option[Piece], piece2:Option[Piece]):Boolean =

@@ -1,5 +1,6 @@
 package engine
 
+import engine.moves.Move
 import engine.squares.Square
 
 /**

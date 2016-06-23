@@ -16,7 +16,7 @@ case class Position(rank: Rank, row: Row)
 
 
 
-case class Square(position: Position, piece: Option[Piece]){
+case class Square(position: Position, piece: Option[Piece] = None){
   def isVacant:Boolean = piece.isEmpty
 }
 
