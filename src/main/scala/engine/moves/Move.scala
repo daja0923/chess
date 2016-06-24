@@ -13,7 +13,7 @@ trait Move {
 
   def piece:Piece
 
-  def from:Position = piece.position
+  def source:Position
 
   def dest:Position
 

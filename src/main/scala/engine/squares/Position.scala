@@ -12,12 +12,16 @@ import engine.squares.Row.Row
 
 
 
-case class Position(rank: Rank, row: Row)
+case class Position(rank: Rank, row: Row){
+  override def toString = "{" + rank + " " + row.id + "}"
+}
 
 
 
 case class Square(position: Position, piece: Option[Piece] = None){
   def isVacant:Boolean = piece.isEmpty
+
+  override def toString = piece.map(_.toString + " in ").getOrElse("") + position
 }
 
 
@@ -36,8 +40,8 @@ object Square{
     row match {
       case Row.ONE => squareWithPiece(pos, white, col)
       case Row.EIGHT => squareWithPiece(pos, black, col)
-      case Row.TWO => Square(pos, Some(Pawn(white, pos)))
-      case Row.SEVEN => Square(pos, Some(Pawn(black, pos)))
+      case Row.TWO => Square(pos, Some(Pawn(white)))
+      case Row.SEVEN => Square(pos, Some(Pawn(black)))
       case _ => Square(Position(col, row), None)
     }
   }
@@ -45,11 +49,11 @@ object Square{
 
   private def squareWithPiece(pos:Position, alliance: Alliance, col:Rank):Square ={
     val piece = col match {
-      case Rank.A | Rank.H => Rook(alliance, pos)
-      case Rank.B | Rank.G => Knight(alliance, pos)
-      case Rank.C | Rank.F => Bishop(alliance, pos)
-      case Rank.D => Queen(alliance, pos)
-      case Rank.E => King(alliance, pos)
+      case Rank.A | Rank.H => Rook(alliance)
+      case Rank.B | Rank.G => Knight(alliance)
+      case Rank.C | Rank.F => Bishop(alliance)
+      case Rank.D => Queen(alliance)
+      case Rank.E => King(alliance)
     }
     Square(pos, Some(piece))
   }

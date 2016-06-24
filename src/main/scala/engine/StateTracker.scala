@@ -31,17 +31,13 @@ object StateTracker {
 
 
   def changeState(current:State, move: Move):State ={
-    val piece = move.piece
-    val pieceCopy = move.piece
-      //piece.changePosition(move.dest)
-
     current.map { square =>
-      if (square.position equals move.dest)
-        square.copy(piece = Some(pieceCopy))
-      else if(square.position equals move.from)
-        square.copy(piece = None)
+      if(square.position equals move.source)
+        square.copy(piece = None) //clear the source square
+      else if (square.position equals move.dest)
+        square.copy(piece = Some(move.piece)) // update the dest square with the moving piece
       else if(piecesTheSame(square.piece, move.attacked))
-        square.copy(piece = None) //clearing removedEnemy square explicitly because it is not always destination square
+        square.copy(piece = None) //clearing attacked piece square explicitly because it is not always destination square
       else square
     }
   }

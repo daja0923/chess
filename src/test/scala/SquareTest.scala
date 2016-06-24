@@ -67,7 +67,7 @@ class SquareTest extends FunSuite{
   test("All pieces in Row 2 must be white pawns"){
     val piecesInRow2 = initialState.filter(_.position.row equals Row.TWO)
     piecesInRow2.forall {
-      case Square(_, Some(Pawn(`white`, _))) => true
+      case Square(_, Some(Pawn(`white`))) => true
       case _ => false
     }
   }
@@ -76,7 +76,7 @@ class SquareTest extends FunSuite{
   test("All pieces in row 7 must be black pawns"){
     val piecesInRow2 = initialState.filter(_.position.row equals Row.SEVEN)
     piecesInRow2.forall {
-      case Square(_, Some(Pawn(`black`, _))) => true
+      case Square(_, Some(Pawn(`black`))) => true
       case _ => false
     }
   }
@@ -87,7 +87,7 @@ class SquareTest extends FunSuite{
     val whitePieceOption = squareOption.flatMap(_.piece)
 
     val isWhiteKing = whitePieceOption match {
-      case Some(King(`white`, _)) => true
+      case Some(King(`white`)) => true
       case _ => false
     }
     assert(isWhiteKing)
@@ -96,7 +96,7 @@ class SquareTest extends FunSuite{
     val blackPieceOption = squareOption2.flatMap(_.piece)
 
     val isBlackKing = blackPieceOption match{
-      case Some(King(`black`, _)) => true
+      case Some(King(`black`)) => true
       case _ => false
     }
     assert(isBlackKing)
@@ -108,7 +108,7 @@ class SquareTest extends FunSuite{
     val whitePieceOption = squareOption.flatMap(_.piece)
 
     val isWhiteQueen = whitePieceOption match {
-      case Some(Queen(`white`, _)) => true
+      case Some(Queen(`white`)) => true
       case _ => false
     }
     assert(isWhiteQueen)
@@ -117,7 +117,7 @@ class SquareTest extends FunSuite{
     val blackPieceOption = squareOption2.flatMap(_.piece)
 
     val isBlackQueen = blackPieceOption match {
-      case Some(Queen(`black`, _)) => true
+      case Some(Queen(`black`)) => true
       case _ => false
     }
     assert(isBlackQueen)
@@ -138,7 +138,7 @@ class SquareTest extends FunSuite{
     assert(whiteRookSquares.length == 2)
     val allWhiteRooks = whiteRookSquares.forall{square =>
       square.piece match {
-        case Some(Rook(`white`,_)) => true
+        case Some(Rook(`white`)) => true
         case _ => false
       }
     }
@@ -156,7 +156,7 @@ class SquareTest extends FunSuite{
 
     val allBlackRooks = blackRookSquares.forall{ square =>
       square.piece match {
-        case Some(Rook(`black`, _)) => true
+        case Some(Rook(`black`)) => true
         case _ => false
       }
     }
@@ -175,7 +175,7 @@ class SquareTest extends FunSuite{
 
     val allKnights = squares.forall{square =>
       square.piece match {
-        case Some(Knight(_,_)) => true
+        case Some(Knight(_)) => true
         case _ => false
       }
     }
@@ -194,7 +194,7 @@ class SquareTest extends FunSuite{
 
     val allBishops = squares.forall{square =>
       square.piece match {
-        case Some(Bishop(_, _)) => true
+        case Some(Bishop(_)) => true
         case _ => false
       }
     }

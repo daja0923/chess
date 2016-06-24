@@ -7,7 +7,8 @@ import engine.squares.Position
  * Created by jamol on 23/06/16.
  */
 case class Promotion(pawn: Pawn,
+                     override val source:Position,
                      override val dest:Position,
                      override val attacked:Option[Piece] = None) extends Move{
-  override def piece: Piece = Queen(pawn.alliance, dest)
+  override def piece: Piece = Queen(pawn.alliance)
 }

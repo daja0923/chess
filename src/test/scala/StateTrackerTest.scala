@@ -1,7 +1,7 @@
-import engine.{Alliance, StateTracker}
 import engine.moves._
 import engine.pieces._
-import engine.squares.{Row, Rank, Position, Square}
+import engine.squares.{Position, Square}
+import engine.{Alliance, StateTracker}
 import org.scalatest.FunSuite
 /**
  * Created by jamol on 22/06/16.
@@ -20,7 +20,6 @@ class StateTrackerTest extends FunSuite{
 
   var currentState:List[Square] = Square.initiate
 
-  val expectedEndState:List[Square] = expectedState
 
   val white = Alliance.White
   val black = Alliance.Black
@@ -32,8 +31,8 @@ class StateTrackerTest extends FunSuite{
 
   test("After 62nd move of white the end state must be as expected"){
     //move 1 - e4 c5
-    move(Position(E, TWO), Position(E, FOUR))
-    move(Position(C, SEVEN), Position(C, FIVE))
+    simpleMove(E, TWO, E, FOUR)
+    simpleMove(C, SEVEN, C, FIVE)
 
     assert(currentState.find(_.position equals Position(C, SEVEN)).get.piece.isEmpty)
     assert(currentState.find(_.position equals Position(C, FIVE)).get.piece.isDefined)
@@ -317,7 +316,7 @@ class StateTrackerTest extends FunSuite{
     //move 60 - Qg1f2+  Kb2c1
     simpleMove(G, ONE, F, TWO)
     simpleMove(B, TWO, C, ONE)
-    println(blackPawn)
+    //println(blackPawn)
     //move 61 - Kg7f6   d5d4
     simpleMove(G, SEVEN, F, SIX)
     simpleMove(D, FIVE, D, FOUR)
@@ -325,22 +324,55 @@ class StateTrackerTest extends FunSuite{
     //move 62 - g6g7
     simpleMove(G, SIX, G, SEVEN)
 
-    def endStatePieces = currentState.filter(_.piece.isDefined).flatMap(_.piece)
 
-    //println(endStatePieces.length)
-
-
-    def simpleMove(rank1:Rank, row1: Row, rank2:Rank, row2:Row) =
-    move(Position(rank1, row1), Position(rank2, row2))
-
-    def blackPawn = currentState.filter(_.piece match {
-      case Some(Pawn(Alliance.Black, _)) => true
+    val whiteKingSquare = StateTracker.square(currentState, F, SIX)
+    assert(whiteKingSquare.piece.exists{
+      case King(`white`) => true
       case _ => false
     })
 
-    //assert(currentState equals expectedEndState)
+    val blackKingSquare = StateTracker.square(currentState, C, ONE)
+    assert(!blackKingSquare.isVacant)
+    assert(blackKingSquare.piece.exists {
+      case King(`black`) => true
+      case _ => false
+    })
+
+    val whiteQueenSquare = StateTracker.square(currentState, F, TWO)
+    assert(whiteQueenSquare.piece.exists{
+      case Queen(`white`) => true
+      case _ => false
+    })
+
+    val blackQueenSquare = StateTracker.square(currentState, E, FOUR)
+    assert(blackQueenSquare.piece.exists{
+      case Queen(`black`) => true
+      case _ => false
+    })
+
+    val whitePawnSquare = StateTracker.square(currentState, G, SEVEN)
+    assert(whitePawnSquare.piece.exists{
+      case Pawn(`white`) => true
+      case _ => false
+    })
+
+    val blackPawnSquare = StateTracker.square(currentState, D, FOUR)
+    assert(blackPawnSquare.piece.exists{
+      case Pawn(`black`) => true
+      case _ => false
+    })
+
+
+    assert(currentState.count(!_.isVacant) == 6)
   }
 
+  def simpleMove(rank1:Rank, row1: Row, rank2:Rank, row2:Row) =
+    move(Position(rank1, row1), Position(rank2, row2))
+
+  def blackPawn = currentState.filter(_.piece match {
+    case Some(Pawn(Alliance.Black)) => true
+    case _ => false
+  })
 
 
   def move[T <: Move](from:Position, to:Position, moveType:String = "simple", attacked:Option[Position] = None):Unit = {
@@ -348,38 +380,18 @@ class StateTrackerTest extends FunSuite{
     val squareTo = tracker.square(currentState, to)
     val attackedPiece:Option[Piece] = attacked.flatMap(p =>tracker.square(currentState, p).piece)
     val move = moveType match {
-      case "simple" => SimpleMove(square.piece.get,to, squareTo.piece)
-      case "check" => Check(square.piece.get, to, squareTo.piece)
-      case "en passant" => EnPassant(square.piece.get, to, attackedPiece.get)
-      case "promotion" => Promotion(square.piece.get.asInstanceOf[Pawn], to, squareTo.piece)
+      case "simple" => SimpleMove(square.piece.get, from,to)
+      case "check" => Check(square.piece.get, from, to)
+      case "en passant" => EnPassant(square.piece.get, from, to, attackedPiece.get.asInstanceOf[Pawn])
+      case "promotion" => Promotion(square.piece.get.asInstanceOf[Pawn], from, to)
     }
     currentState = tracker.changeState(currentState, move)
   }
 
 
-  def castle(king:King, rook:Rook):Unit = {
-    val move1 = KingCastle(king, rook)
-    val move2 = RookCastle(rook, king)
-    currentState = tracker.changeState(currentState, move1)
-    currentState = tracker.changeState(currentState, move2)
+  def castle(king:King, rook:Rook, dest:Position):Unit = {
+    val move = Castle(king, rook, dest)
+    currentState = tracker.changeState(currentState, move)
   }
 
-  def expectedState:List[Square] = {
-    val emptySquares = for{
-      rank <- Rank.values
-      row <- Row.values
-    }yield Square(Position(rank, row))
-
-    emptySquares.map{square =>
-      square.position match {
-        case Position(C, ONE) =>    square.copy(piece = Some(King(black, square.position)))
-        case Position(D, FOUR) =>   square.copy(piece = Some(Pawn(black, square.position)))
-        case Position(E, FOUR) =>   square.copy(piece = Some(Queen(black, square.position)))
-        case Position(F, TWO) =>    square.copy(piece = Some(Queen(white, square.position)))
-        case Position(F, SIX) =>    square.copy(piece = Some(King(white, square.position)))
-        case Position(G, SEVEN) =>  square.copy(piece = Some(Pawn(white, square.position)))
-        case _ =>                   square
-      }
-    }.toList
-  }
 }
