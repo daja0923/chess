@@ -4,7 +4,7 @@ import engine.moves.Move
 import engine.pieces.Piece
 import engine.squares.Rank.Rank
 import engine.squares.Row.Row
-import engine.squares.{Position, Rank, Row, Square}
+import engine.squares.{Position, Square}
 
 /**
  * Created by jamol on 22/06/16.
@@ -30,20 +30,26 @@ object StateTracker {
 
 
 
-  def changeState(current:State, move: Move):State =
+  def changeState(current:State, move: Move):State ={
+    val piece = move.piece
+    val pieceCopy = move.piece
+      //piece.changePosition(move.dest)
+
     current.map { square =>
       if (square.position equals move.dest)
-        square.copy(piece = Some(move.piece))
+        square.copy(piece = Some(pieceCopy))
       else if(square.position equals move.from)
         square.copy(piece = None)
       else if(piecesTheSame(square.piece, move.attacked))
         square.copy(piece = None) //clearing removedEnemy square explicitly because it is not always destination square
       else square
     }
+  }
+
 
 
   def square(state: State, position: Position):Square = {
-    val squareOption = state.find(_.position equals Position(Rank.E, Row.TWO))
+    val squareOption = state.find(_.position equals position)
     if(squareOption.isEmpty)
       throw new NoSuchElementException("square at position " + position)
     else
