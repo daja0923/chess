@@ -44,25 +44,26 @@ object Square{
     val coord = Coord(col, row)
     val white = Alliance.White
     val black = Alliance.Black
-    row match {
-      case Row.ONE => squareWithPiece(coord, white, col)
-      case Row.EIGHT => squareWithPiece(coord, black, col)
-      case Row.TWO => Square(coord, Pawn(white))
-      case Row.SEVEN => Square(coord, Pawn(black))
-      case _ => Square(Coord(col, row))
+    val piece:Option[Piece] = row match {
+      case Row.ONE => Some(elitePiece(coord.rank, white))
+      case Row.EIGHT => Some(elitePiece(coord.rank, black))
+      case Row.TWO => Some(Pawn(white))
+      case Row.SEVEN => Some(Pawn(black))
+      case _ => None
     }
+
+    Square(coord, piece)
   }
 
 
-  private def squareWithPiece(pos:Coord, alliance: Alliance, col:Rank):Square ={
-    val piece = col match {
+  private def elitePiece(rank:Rank, alliance: Alliance):Piece ={
+    rank match {
       case Rank.A | Rank.H => Rook(alliance)
       case Rank.B | Rank.G => Knight(alliance)
       case Rank.C | Rank.F => Bishop(alliance)
       case Rank.D => Queen(alliance)
       case Rank.E => King(alliance)
     }
-    Square(pos, piece)
   }
 
 }
