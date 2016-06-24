@@ -5,49 +5,49 @@ package engine.pieces
  */
 
 import engine.Alliance._
-import engine.squares.{Position, Square}
+import engine.squares.{Coord, Square}
 
 abstract class Piece {
 
   def alliance:Alliance
 
-  def canMoveTo(currentState:List[Square],position:Position):Boolean
+  def canMoveTo(currentState:List[Square],position:Coord):Boolean
 
 }
 
 case class King(override val alliance: Alliance) extends Piece {
-  override def canMoveTo(currentState:List[Square],position:Position):Boolean = ???
+  override def canMoveTo(currentState:List[Square],position:Coord):Boolean = ???
 
 }
 
 
 case class Queen(override val alliance: Alliance) extends Piece {
-  override def canMoveTo(currentState:List[Square],position:Position):Boolean = ???
+  override def canMoveTo(currentState:List[Square],position:Coord):Boolean = ???
 
 }
 
 
 
 case class Rook(override val alliance: Alliance) extends Piece {
-  override def canMoveTo(currentState:List[Square],position:Position):Boolean = ???
+  override def canMoveTo(currentState:List[Square],position:Coord):Boolean = ???
 
 }
 
 
 
 case class Bishop(override val alliance: Alliance) extends Piece {
-  override def canMoveTo(currentState:List[Square],position:Position):Boolean = ???
+  override def canMoveTo(currentState:List[Square],position:Coord):Boolean = ???
 
 }
 
 
 
 case class Knight(override val alliance: Alliance) extends Piece {
-  override def canMoveTo(currentState:List[Square],position:Position):Boolean = ???
+  override def canMoveTo(currentState:List[Square],position:Coord):Boolean = ???
 }
 
 
 
 case class Pawn(override val alliance: Alliance) extends Piece {
-  override def canMoveTo(currentState:List[Square],position:Position):Boolean = ???
+  override def canMoveTo(currentState:List[Square],position:Coord):Boolean = ???
 }

@@ -2,7 +2,7 @@ package engine
 
 import engine.Alliance.Alliance
 import engine.moves.Move
-import engine.squares.{Square, Position}
+import engine.squares.{Square, Coord}
 
 /**
  * Created by jamol on 20/06/16.
@@ -32,11 +32,11 @@ class Game {
 
 
 
-  def getMove(from:Position, to:Position):Option[Move] = None
+  def getMove(from:Coord, to:Coord):Option[Move] = None
 
 
 
-  def move(from:Position, to:Position):Unit = {
+  def move(from:Coord, to:Coord):Unit = {
     getMove(from, to) match {
       case Some(m) =>
         moves = m :: moves
@@ -48,8 +48,8 @@ class Game {
 
 
   private def replaceIfMatch(square: Square, move: Move):Square = {
-    if(square.position equals move.dest)
-      square.copy(piece = Some(move.piece))
+    if(square.coord equals move.dest)
+      square.fill(move.piece)
     else
       square
   }

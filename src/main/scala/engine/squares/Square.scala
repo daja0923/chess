@@ -12,20 +12,27 @@ import engine.squares.Row.Row
 
 
 
-case class Position(rank: Rank, row: Row){
-  override def toString = "{" + rank + " " + row.id + "}"
-}
 
 
 
-case class Square(position: Position, piece: Option[Piece] = None){
+case class Square private(coord: Coord, piece: Option[Piece] = None){
+
   def isVacant:Boolean = piece.isEmpty
 
-  override def toString = piece.map(_.toString + " in ").getOrElse("") + position
+  def clear:Square = Square(coord)
+
+  def fill(piece: Piece):Square = Square(coord, piece)
+
+  override def toString = piece.map(_.toString + " in ").getOrElse("") + coord
 }
 
 
 object Square{
+
+  def apply(coord: Coord):Square = new Square(coord)
+
+  def apply(coord: Coord, piece: Piece):Square = new Square(coord, Some(piece))
+
   def initiate:List[Square] = (for {
     col <- Rank.values
     row <- Row.values
@@ -34,20 +41,20 @@ object Square{
 
 
   private def buildSquare(col:Rank, row:Row):Square = {
-    val pos = Position(col, row)
+    val coord = Coord(col, row)
     val white = Alliance.White
     val black = Alliance.Black
     row match {
-      case Row.ONE => squareWithPiece(pos, white, col)
-      case Row.EIGHT => squareWithPiece(pos, black, col)
-      case Row.TWO => Square(pos, Some(Pawn(white)))
-      case Row.SEVEN => Square(pos, Some(Pawn(black)))
-      case _ => Square(Position(col, row), None)
+      case Row.ONE => squareWithPiece(coord, white, col)
+      case Row.EIGHT => squareWithPiece(coord, black, col)
+      case Row.TWO => Square(coord, Pawn(white))
+      case Row.SEVEN => Square(coord, Pawn(black))
+      case _ => Square(Coord(col, row))
     }
   }
 
 
-  private def squareWithPiece(pos:Position, alliance: Alliance, col:Rank):Square ={
+  private def squareWithPiece(pos:Coord, alliance: Alliance, col:Rank):Square ={
     val piece = col match {
       case Rank.A | Rank.H => Rook(alliance)
       case Rank.B | Rank.G => Knight(alliance)
@@ -55,7 +62,7 @@ object Square{
       case Rank.D => Queen(alliance)
       case Rank.E => King(alliance)
     }
-    Square(pos, Some(piece))
+    Square(pos, piece)
   }
 
 }
