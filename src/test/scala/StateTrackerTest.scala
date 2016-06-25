@@ -1,6 +1,6 @@
 import engine.moves._
 import engine.pieces._
-import engine.squares.{Coord, Square}
+import engine.squares.{Position, Square}
 import engine.{Alliance, StateTracker}
 import org.scalatest.FunSuite
 /**
@@ -34,40 +34,48 @@ class StateTrackerTest extends FunSuite{
     simpleMove(E, TWO, E, FOUR)
     simpleMove(C, SEVEN, C, FIVE)
 
-    assert(currentState.find(_.coord equals Coord(C, SEVEN)).get.piece.isEmpty)
-    assert(currentState.find(_.coord equals Coord(C, FIVE)).get.piece.isDefined)
+    assert(currentState.find(_.coord equals Position(C, SEVEN)).get.piece.isEmpty)
+    assert(currentState.find(_.coord equals Position(C, FIVE)).get.piece.isDefined)
 
     //move 2 - Nf3 d6
-    move(Coord(G, ONE), Coord(F, THREE))
-    move(Coord(D, SEVEN), Coord(D, SIX))
+    move(Position(G, _1), Position(F, THREE))
+    move(Position(D, SEVEN), Position(D, SIX))
 
     //move 3 - Bf1b5+ Bc8d7
-    move(Coord(F, ONE), Coord(B, FIVE))
+    move(Position(F, _1), Position(B, FIVE))
     simpleMove(C, EIGHT, D, SEVEN)
 
     //move 4 - Bb5xd7+ Qd8xd7
-    move(Coord(B, FIVE), Coord(D, SEVEN))
-    move(Coord(D, EIGHT), Coord(D, SEVEN))
+    move(Position(B, FIVE), Position(D, SEVEN))
+    move(Position(D, EIGHT), Position(D, SEVEN))
 
     //move 5 - c2c4 Nb8c6
     simpleMove(C, TWO, C, FOUR)
     simpleMove(B, EIGHT, C, SIX)
 
     //move 6 - Nb1c3 Ng8f6
-    simpleMove(B, ONE, C, THREE)
+    simpleMove(B, _1, C, THREE)
     simpleMove(G, EIGHT, F, SIX)
 
     //move 7 - 0-0 g7g6
-    simpleMove(E, ONE, G, ONE); simpleMove(H, ONE, F, ONE)
+    val king = StateTracker.square(currentState, E, _1)
+      .piece.get
+      .asInstanceOf[King]
+    val rook = StateTracker.square(currentState, H, _1)
+    .piece.get
+    .asInstanceOf[Rook]
+    val kingCastle = SimpleMove(king,Position(E, _1), Position(G, _1))
+    val rookCastle = SimpleMove(rook, Position(H, _1), Position(F, _1))
+    castle(kingCastle, rookCastle)
     simpleMove(G, SEVEN, G, SIX)
 
 
     //move 8 - d2d4 c5xd4
     simpleMove(D, TWO, D, FOUR)
-    move(Coord(C, FIVE), Coord(D, FOUR))
+    move(Position(C, FIVE), Position(D, FOUR))
 
     //move 9 - Nf3xd4 Bf8g7
-    move(Coord(F, THREE), Coord(D, FOUR))
+    move(Position(F, THREE), Position(D, FOUR))
     simpleMove(F, EIGHT, G, SEVEN)
 
     //move 10 - Nd4e2 Qd7e6!?
@@ -84,13 +92,13 @@ class StateTrackerTest extends FunSuite{
 
 
     //move 13 - Nc7xa8 Ke4xc4
-    move(Coord(C,SEVEN), Coord(A, EIGHT))
+    move(Position(C,SEVEN), Position(A, EIGHT))
 
-    move(Coord(E, FOUR), Coord(C, FOUR))
+    move(Position(E, FOUR), Position(C, FOUR))
 
     //move 14 - Na8b6 a7xb6
     simpleMove(A, EIGHT, B, SIX)
-    move(Coord(A, SEVEN), Coord(B, SIX))
+    move(Position(A, SEVEN), Position(B, SIX))
 
     //move 15 - Ne2c3 Rh8a8
     simpleMove(E,TWO, C,THREE)
@@ -101,17 +109,17 @@ class StateTrackerTest extends FunSuite{
     simpleMove(F,SIX, E,FOUR)
 
     //move 17 - Nc3xe4 Qc4xe4
-    move(Coord(C, THREE), Coord(E, FOUR))
-    move(Coord(C, FOUR),Coord(E, FOUR))
+    move(Position(C, THREE), Position(E, FOUR))
+    move(Position(C, FOUR),Position(E, FOUR))
 
 
 
     //move 18 - Qd1b3 f7f5
-    move(Coord(D, ONE), Coord(B, THREE))
+    move(Position(D, _1), Position(B, THREE))
     simpleMove(F, SEVEN, F, FIVE)
 
     //move 19 - Bc1g5 Qe4b4
-    simpleMove(C, ONE, G, FIVE)
+    simpleMove(C, _1, G, FIVE)
     simpleMove(E,FOUR, B, FOUR)
 
 
@@ -122,21 +130,21 @@ class StateTrackerTest extends FunSuite{
 
     //move 21 - h2h3  Ra8xa4
     simpleMove(H, TWO, H, THREE)
-    move(Coord(A, EIGHT), Coord(A, FOUR))
+    move(Position(A, EIGHT), Position(A, FOUR))
 
 
     //move 22 - Ra1xa4  Qb4xa4
-    move(Coord(A, ONE), Coord(A, FOUR))
-    move(Coord(B, FOUR), Coord(A, FOUR))
+    move(Position(A, _1), Position(A, FOUR))
+    move(Position(B, FOUR), Position(A, FOUR))
 
 
     //move 23 - Qf7xh7 Be5xb2
-    move(Coord(F, SEVEN), Coord(H, SEVEN))
-    move(Coord(E, FIVE), Coord(B, TWO))
+    move(Position(F, SEVEN), Position(H, SEVEN))
+    move(Position(E, FIVE), Position(B, TWO))
 
 
     //move 24 - Qh7xg6  Qa4e4
-    move(Coord(H, SEVEN), Coord(G, SIX))
+    move(Position(H, SEVEN), Position(G, SIX))
     simpleMove(A, FOUR, E, FOUR)
 
 
@@ -174,19 +182,19 @@ class StateTrackerTest extends FunSuite{
 
 
     //move 31 - Qf5xe6+ Kd7xe6
-    move(Coord(F, FIVE), Coord(E, SIX))
-    move(Coord(D, SEVEN), Coord(E, SIX))
+    move(Position(F, FIVE), Position(E, SIX))
+    move(Position(D, SEVEN), Position(E, SIX))
 
 
 
     //move 32 - g2g3    f4xg3
     simpleMove(G, TWO, G, THREE)
-    move(Coord(F, FOUR), Coord(G, THREE))
+    move(Position(F, FOUR), Position(G, THREE))
 
 
 
     //move 33 - f2xg3   b5b4
-    move(Coord(F, TWO), Coord(G, THREE))
+    move(Position(F, TWO), Position(G, THREE))
     simpleMove(B, FIVE, B, FOUR)
 
 
@@ -198,7 +206,7 @@ class StateTrackerTest extends FunSuite{
 
     //println(currentState)
     //move 35 - Kg1h1   b4b3
-    simpleMove(G, ONE, H, ONE)
+    simpleMove(G, _1, H, _1)
     simpleMove(B, FOUR, B, THREE)
 
 
@@ -216,7 +224,7 @@ class StateTrackerTest extends FunSuite{
     simpleMove(C, SIX, E, SEVEN)
 
     //move 39 - Rf1d1   e6e5
-    simpleMove(F, ONE, D, ONE)
+    simpleMove(F, _1, D, _1)
     simpleMove(E, SIX, E, FIVE)
 
     //move 40 - Bf4e3   Kd5c4
@@ -227,12 +235,12 @@ class StateTrackerTest extends FunSuite{
 
 
     //move 41 - Be3xd4  e5xd4
-    move(Coord(E, THREE), Coord(D, FOUR))
-    move(Coord(E, FIVE), Coord(D, FOUR))
+    move(Position(E, THREE), Position(D, FOUR))
+    move(Position(E, FIVE), Position(D, FOUR))
 
 
     //move 42 - Kh1g2   b3b2
-    simpleMove(H, ONE, G, TWO)
+    simpleMove(H, _1, G, TWO)
     simpleMove(B, THREE, B, TWO)
 
     //move 43 - Kg2f3   Kc4c3
@@ -248,28 +256,28 @@ class StateTrackerTest extends FunSuite{
     simpleMove(C, THREE, C, TWO)
 
     //move 46 - Rd1h1   d4d3
-    simpleMove(D, ONE, H, ONE)
+    simpleMove(D, _1, H, _1)
     simpleMove(D, FOUR, D, THREE)
 
 
     //move 47 - Ke4f5   b2b1
     simpleMove(E,FOUR, F, FIVE)
-    move(Coord(B, TWO), Coord(B, ONE), "promotion")
+    move(Position(B, TWO), Position(B, _1), "promotion")
 
 
     //move 48 - Rh1xb1  Kc2xb1
-    move(Coord(H,ONE), Coord(B, ONE))
-    move(Coord(C,  TWO), Coord(B, ONE))
+    move(Position(H,_1), Position(B, _1))
+    move(Position(C,  TWO), Position(B, _1))
 
 
     //move 49 - Kf5xg6  d3d2
-    move(Coord(F, FIVE), Coord(G, SIX))
+    move(Position(F, FIVE), Position(G, SIX))
     simpleMove(D, THREE, D, TWO)
 
 
     //move 50 - h7h8  d2d1
-    move(Coord(H, SEVEN), Coord(H, EIGHT), "promotion")
-    move(Coord(D, TWO), Coord(D, ONE), "promotion")
+    move(Position(H, SEVEN), Position(H, EIGHT), "promotion")
+    move(Position(D, TWO), Position(D, _1), "promotion")
 
     //move 51 - Qh8h7   b7b5
     simpleMove(H,EIGHT, H, SEVEN)
@@ -277,21 +285,21 @@ class StateTrackerTest extends FunSuite{
 
 
     //move 52 - Kg6f6+  Kb1b2
-    move(Coord(G, SIX), Coord(F, SIX))
-    simpleMove(B, ONE, B, TWO)
+    move(Position(G, SIX), Position(F, SIX))
+    simpleMove(B, _1, B, TWO)
 
 
     //move 53 - Qh7h2+  Kb2a1
-    move(Coord(H, SEVEN), Coord(H, TWO))
-    simpleMove(B, TWO, A, ONE)
+    move(Position(H, SEVEN), Position(H, TWO))
+    simpleMove(B, TWO, A, _1)
 
     //move 54 - Qh2f4   b5b4
     simpleMove(H, TWO, F, FOUR)
     simpleMove(B, FIVE, B, FOUR)
 
     //move 55 - Qf4xb4  Qd1f3+
-    move(Coord(F, FOUR), Coord(B, FOUR))
-    simpleMove(D, ONE, F, THREE)
+    move(Position(F, FOUR), Position(B, FOUR))
+    simpleMove(D, _1, F, THREE)
 
     //move 56 - Kf6g7   d6d5
     simpleMove(F, SIX, G, SEVEN)
@@ -301,19 +309,19 @@ class StateTrackerTest extends FunSuite{
 
     //move 57 - Qb4d4+  Ka1b1
     simpleMove(B, FOUR, D, FOUR)
-    simpleMove(A, ONE, B, ONE)
+    simpleMove(A, _1, B, _1)
 
     //move 58 - g5g6    Qf3e4
     simpleMove(G, FIVE, G, SIX)
     simpleMove(F, THREE, E, FOUR)
 
     //move 59 - Qd4g1+  Kb1b2
-    simpleMove(D, FOUR, G, ONE)
-    simpleMove(B, ONE, B, TWO)
+    simpleMove(D, FOUR, G, _1)
+    simpleMove(B, _1, B, TWO)
 
     //move 60 - Qg1f2+  Kb2c1
-    simpleMove(G, ONE, F, TWO)
-    simpleMove(B, TWO, C, ONE)
+    simpleMove(G, _1, F, TWO)
+    simpleMove(B, TWO, C, _1)
     //println(blackPawn)
     //move 61 - Kg7f6   d5d4
     simpleMove(G, SEVEN, F, SIX)
@@ -329,7 +337,7 @@ class StateTrackerTest extends FunSuite{
       case _ => false
     })
 
-    val blackKingSquare = StateTracker.square(currentState, C, ONE)
+    val blackKingSquare = StateTracker.square(currentState, C, _1)
     assert(!blackKingSquare.isVacant)
     assert(blackKingSquare.piece.exists {
       case King(`black`) => true
@@ -375,7 +383,7 @@ class StateTrackerTest extends FunSuite{
 
 
   def simpleMove(rank1:Rank, row1: Row, rank2:Rank, row2:Row) =
-    move(Coord(rank1, row1), Coord(rank2, row2))
+    move(Position(rank1, row1), Position(rank2, row2))
 
   def blackPawn = currentState.filter(_.piece match {
     case Some(Pawn(Alliance.Black)) => true
@@ -383,9 +391,9 @@ class StateTrackerTest extends FunSuite{
   })
 
 
-  def move[T <: Move](from:Coord, to:Coord,
+  def move[T <: Move](from:Position, to:Position,
                       moveType:String = "simple",
-                      attacked:Option[Coord] = None):Unit = {
+                      attacked:Option[Position] = None):Unit = {
     val square = tracker.square(currentState, from)
     val squareTo = tracker.square(currentState, to)
     val attackedPiece:Option[Piece] = attacked.flatMap(p =>tracker.square(currentState, p).piece)
@@ -400,8 +408,8 @@ class StateTrackerTest extends FunSuite{
   }
 
 
-  def castle(king:King, rook:Rook, dest:Coord):Unit = {
-    val move = Castle(king, rook, dest)
+  def castle(king:SimpleMove, rook:SimpleMove):Unit = {
+    val move = Castle(king, rook)
     currentState = tracker.changeState(currentState, move)
   }
 

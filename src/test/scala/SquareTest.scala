@@ -83,7 +83,7 @@ class SquareTest extends FunSuite{
 
 
   test("In row 1 and 8 rank e  kings must reside"){
-    val squareOption = initialState.find(_.coord equals Coord(Rank.E, Row.ONE))
+    val squareOption = initialState.find(_.coord equals Position(Rank.E, Row._1))
     val whitePieceOption = squareOption.flatMap(_.piece)
 
     val isWhiteKing = whitePieceOption match {
@@ -92,7 +92,7 @@ class SquareTest extends FunSuite{
     }
     assert(isWhiteKing)
 
-    val squareOption2 = initialState.find(_.coord equals Coord(Rank.E, Row.EIGHT))
+    val squareOption2 = initialState.find(_.coord equals Position(Rank.E, Row.EIGHT))
     val blackPieceOption = squareOption2.flatMap(_.piece)
 
     val isBlackKing = blackPieceOption match{
@@ -104,7 +104,7 @@ class SquareTest extends FunSuite{
 
 
   test("In row 8 and 1  rank d Queens must reside"){
-    val squareOption = initialState.find(_.coord equals Coord(Rank.D, Row.ONE))
+    val squareOption = initialState.find(_.coord equals Position(Rank.D, Row._1))
     val whitePieceOption = squareOption.flatMap(_.piece)
 
     val isWhiteQueen = whitePieceOption match {
@@ -113,7 +113,7 @@ class SquareTest extends FunSuite{
     }
     assert(isWhiteQueen)
 
-    val squareOption2 = initialState.find(_.coord equals Coord(Rank.D, Row.EIGHT))
+    val squareOption2 = initialState.find(_.coord equals Position(Rank.D, Row.EIGHT))
     val blackPieceOption = squareOption2.flatMap(_.piece)
 
     val isBlackQueen = blackPieceOption match {
@@ -128,7 +128,7 @@ class SquareTest extends FunSuite{
   test("In rows 1 and 8 ranks a and h Rooks must reside"){
     val whiteRookSquares = initialState.filter{s =>
       s.coord match {
-        case Coord(Rank.A | Rank.H, Row.ONE) => true
+        case Position(Rank.A | Rank.H, Row._1) => true
         case _ => false
       }
     }
@@ -146,7 +146,7 @@ class SquareTest extends FunSuite{
 
     val blackRookSquares = initialState.filter{square =>
       square.coord match {
-        case Coord(Rank.A | Rank.H, Row.EIGHT) => true
+        case Position(Rank.A | Rank.H, Row.EIGHT) => true
         case _ => false
       }
     }
@@ -167,7 +167,7 @@ class SquareTest extends FunSuite{
   test("Squares In rows 1 and 8 ranks b and g should have knights"){
     val squares = initialState.filter{square =>
       square.coord match {
-        case Coord(Rank.B | Rank.G, Row.ONE | Row.EIGHT) => true
+        case Position(Rank.B | Rank.G, Row._1 | Row.EIGHT) => true
         case _ => false
       }
     }
@@ -186,7 +186,7 @@ class SquareTest extends FunSuite{
   test("Squares in rows 1 and 8 ranks c and f should have bishops"){
     val squares = initialState.filter{square =>
       square.coord match {
-        case Coord(Rank.C | Rank.F, Row.ONE | Row.EIGHT) => true
+        case Position(Rank.C | Rank.F, Row._1 | Row.EIGHT) => true
         case _ => false
       }
     }

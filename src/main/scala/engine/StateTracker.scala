@@ -1,10 +1,10 @@
 package engine
 
-import engine.moves.Move
+import engine.moves.{Castle, Move}
 import engine.pieces.Piece
 import engine.squares.Rank.Rank
 import engine.squares.Row.Row
-import engine.squares.{Coord, Square}
+import engine.squares.{Position, Square}
 
 /**
  * Created by jamol on 22/06/16.
@@ -28,30 +28,38 @@ object StateTracker {
   }
 
 
-  def square(state: State, position: Coord):Square = {
-    val squareOption = state.find(_.coord equals position)
+  def square(state: State, coord: Position):Square = {
+    val squareOption = state.find(_.coord equals coord)
     if(squareOption.isEmpty)
-      throw new NoSuchElementException("square at position " + position)
+      throw new NoSuchElementException("square at position " + coord)
     else
       squareOption.get
   }
 
 
-  def square(state:State, rank: Rank, row: Row):Square = square(state, Coord(rank, row))
+  def square(state:State, rank: Rank, row: Row):Square = square(state, Position(rank, row))
 
 
 
   def changeState(current:State, move: Move):State = current.map(updateSquare(_, move))
 
 
+
   private def updateSquare(square: Square, move: Move): Square = {
-    if(square.coord equals move.source)
-      square.clear
-    else if (square.coord equals move.dest)
-      square.fill(move.piece)
-    else if(piecesTheSame(square.piece, move.attacked))
-      square.clear //clearing attacked piece square explicitly because it is not always destination square
-    else square
+    move match {
+      case Castle(km, rm) =>
+        val sq = updateSquare(square, km)
+        updateSquare(sq, rm)
+      case _ =>
+        if(square.coord equals move.source)
+          square.clear
+        else if (square.coord equals move.dest)
+          square.fill(move.piece)
+        else if(piecesTheSame(square.piece, move.captured))
+          square.clear //clearing attacked piece square explicitly because it is not always destination square
+        else square
+    }
+
   }
 
 

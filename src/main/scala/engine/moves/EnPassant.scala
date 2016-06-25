@@ -1,7 +1,7 @@
 package engine.moves
 
-import engine.pieces.Piece
-import engine.squares.Coord
+import engine.pieces.{Pawn, Piece}
+import engine.squares.Position
 
 /**
  * Created by jamol on 23/06/16.
@@ -10,10 +10,10 @@ import engine.squares.Coord
 
 
 case class EnPassant(override val piece: Piece,
-                     override val source:Coord,
-                     override val dest:Coord,
-                     attackedPawn:Piece) extends Move{
+                     override val source:Position,
+                     override val dest:Position,
+                     capturedPawn:Pawn) extends SingleMove(piece, source, dest){
 
 
-  override def attacked: Option[Piece] = Some(attackedPawn)
+  override def captured: Option[Piece] = Some(capturedPawn)
 }

@@ -12,10 +12,7 @@ import engine.squares.Row.Row
 
 
 
-
-
-
-case class Square private(coord: Coord, piece: Option[Piece] = None){
+case class Square private(coord: Position, piece: Option[Piece] = None){
 
   def isVacant:Boolean = piece.isEmpty
 
@@ -29,9 +26,9 @@ case class Square private(coord: Coord, piece: Option[Piece] = None){
 
 object Square{
 
-  def apply(coord: Coord):Square = new Square(coord)
+  def apply(coord: Position):Square = new Square(coord)
 
-  def apply(coord: Coord, piece: Piece):Square = new Square(coord, Some(piece))
+  def apply(coord: Position, piece: Piece):Square = new Square(coord, Some(piece))
 
   def initiate:List[Square] = (for {
     col <- Rank.values
@@ -41,18 +38,18 @@ object Square{
 
 
   private def buildSquare(col:Rank, row:Row):Square = {
-    val coord = Coord(col, row)
+    val pos = Position.get(col, row)
     val white = Alliance.White
     val black = Alliance.Black
     val piece:Option[Piece] = row match {
-      case Row.ONE => Some(elitePiece(coord.rank, white))
-      case Row.EIGHT => Some(elitePiece(coord.rank, black))
+      case Row._1 => Some(elitePiece(pos.rank, white))
+      case Row.EIGHT => Some(elitePiece(pos.rank, black))
       case Row.TWO => Some(Pawn(white))
       case Row.SEVEN => Some(Pawn(black))
       case _ => None
     }
 
-    Square(coord, piece)
+    Square(pos, piece)
   }
 
 
